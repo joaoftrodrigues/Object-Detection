@@ -1,0 +1,38 @@
+<annotation>
+	<folder>images</folder>
+	<filename>Delallo-Pizza-Party-52.jpg</filename>
+	<path>D:\MCD\1\VC\6. Detecao e Identificacao de Objetos\Desafio\images\Delallo-Pizza-Party-52.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1024</width>
+		<height>1556</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>Pizza</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>87</xmin>
+			<ymin>830</ymin>
+			<xmax>729</xmax>
+			<ymax>1348</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Pizza</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>171</xmin>
+			<ymin>1</ymin>
+			<xmax>526</xmax>
+			<ymax>315</ymax>
+		</bndbox>
+	</object>
+</annotation>
