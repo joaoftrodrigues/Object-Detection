@@ -26,7 +26,8 @@ COLORS = np.random.uniform(0, 255, size=(len(class_names), 3))
 # carregar o modelo (neste caso o SSD)
 SSDmodel = cv2.dnn.readNet(model=MODEL_FILE, config=CONFIG_FILE, framework="TensorFlow")
 
-images_iou_matches = {}
+precisions = []
+recalls = []
 
 # ciclo de imagens no diretório
 for img_file in images_dir:
@@ -50,6 +51,10 @@ for img_file in images_dir:
     output = SSDmodel.forward()
 
     dict_key = 0
+
+    # To know number of True and False Positives
+    tp = 0
+    fp = 0
 
     for detection in output[0, 0, :, :]:
 
@@ -77,44 +82,44 @@ for img_file in images_dir:
 
                 iou_results = tools.calc_iou_with_gt_boxes(previsioned_box, img_gt_boxes)
 
-                # Add current previsioned box iot with ground truth boxes
-                labels_equivalency[dict_key] = iou_results
+                higher_iou = max(iou_results)
 
-                # Update key for next box
-                dict_key += 1
+                # For iou less than 0.5
+                # assume it as False Positive
+                if higher_iou < 0.5:
+                    fp += 1
+                else:
+                    tp += 1
 
             # colocar retangulos e texto a marcar os objetos identificados
             cv2.rectangle(img, (int(bbox_x), int(bbox_y)), (int(bbox_width), int(bbox_height)), color, thickness=2)
             cv2.putText(img, class_name, (int(bbox_x), int(bbox_y - 5)), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
 
-    # Associate file to resultant IoUs
-    images_iou_matches[os.path.basename(img_file)] = labels_equivalency
+    # Calculus of Precision and Recall
+    precision = tools.get_precision(tp, fp)
+    recall = tools.get_recall(tp, img_gt_boxes)
+
+    print(f"Precision: {precision}")
+    print(f"Recall: {recall}")
+    print(f"> False Positives: {fp}")
+
+    # Add current image's precision an recall to list
+    precisions.append(precision)
+    recalls.append(recall)
 
     cv2.imshow('output', img)
 
     cv2.waitKey(0)
 
-#print(images_iou_matches)
-
-#for key, value in images_iou_matches.items():
-
- #   print(key, ':', value)
-
-  #  for key2, value2 in value.items():
-
-   #     print("\t", key, ':', value)
-
-
-#print(images_iou_matches['06LasVegas-Pizza-HeadsUp-good-videoSixteenByNine3000.jpg'])
-
-for key, value in images_iou_matches['alhofrito_57e575f2d901c.jpg'].items():
-
-    print(key, ':', value)
-
-  #  for key2, value2 in value.items():
-
-   #     print("\t", key, ':', value)
-
-
 # fechar o stream de video
 cv2.destroyAllWindows()
+
+# Get mean precision
+mean_precision = np.mean(precisions)
+
+# Get mean recall
+mean_recall = np.mean(recalls)
+
+print(f"Average Precision:{mean_precision}")
+print(f"Average Recall: {mean_recall}")
+

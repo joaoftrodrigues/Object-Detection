@@ -113,3 +113,42 @@ def calc_iou_with_gt_boxes(previsioned_box, img_gt_boxes):
     iou_results = [calc_iou(previsioned_box, gt_box) for gt_box in img_gt_boxes]
 
     return iou_results
+
+
+def get_precision(tp, fp):
+    """
+    Calculus of precision, given number of True Positives
+    and False Positives
+    :param tp: number of True Positives
+    :param fp: number of False Positives
+    :return:
+    """
+
+    # Sum all previsions
+    total = tp + fp
+
+    if total == 0:
+        return 0
+
+    # Calculus of precision
+    precision = tp / total
+
+    return precision
+
+
+def get_recall(tp, gt_boxes):
+    """
+    Calculate Recall bases on number of True Positives
+    and Ground Truth boxes
+    :param tp: Number of True Positives
+    :param gt_boxes: List of bounding boxes
+    :return:
+    """
+
+    # Quantity of bounding boxes
+    n_gt_boxes = len(gt_boxes)
+
+    # Calculus of Recall
+    recall = tp / n_gt_boxes
+
+    return recall
