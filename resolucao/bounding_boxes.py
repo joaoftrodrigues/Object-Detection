@@ -12,6 +12,24 @@ annotations_dir = glob.glob(annotations_path + "\\" + "*.xml")
 
 sample_annotations_all = []
 
+
+def get_img_annotations(image):
+    tree = ET.parse(image)
+    root = tree.getroot()
+
+    sample_annotations = []
+
+    for neighboor in root.iter('bndbox'):
+        xmin = int(neighboor.find('xmin').text)
+        ymin = int(neighboor.find('ymin').text)
+        xmax = int(neighboor.find('xmax').text)
+        ymax = int(neighboor.find('ymax').text)
+
+        sample_annotations.append([xmin, ymin, xmax, ymax])
+
+    return sample_annotations
+
+
 def get_all_annotations():
     for path_ann in annotations_dir:
         tree = ET.parse(path_ann)
