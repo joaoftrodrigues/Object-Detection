@@ -1,7 +1,4 @@
-from torchvision import ops
-import torch
 import numpy as np
-
 
 def is_between(value, min, max):
     """
@@ -114,37 +111,5 @@ def calc_iou_with_gt_boxes(previsioned_box, img_gt_boxes):
     """
 
     iou_results = [calc_iou(previsioned_box, gt_box) for gt_box in img_gt_boxes]
-
-    return iou_results
-
-
-def previsioned_iou_against_gt(previsioned_box, gt_boxes):
-    """
-    Compare previsioned box with ground truth boxes,
-    based on IoU (Interception of Union)
-    :param previsioned_box:
-    :param gt_boxes:
-    :return:
-    """
-
-    # All results obtained
-    # between previsioned and all ground truths
-    iou_results = []
-
-    print(previsioned_box)
-    prev_box = torch.tensor(previsioned_box, dtype=torch.float)
-    print(prev_box)
-
-    # Calculate each IoU between previsioned and all ground truth annotations
-    for gt_box in gt_boxes:
-
-        print(gt_box)
-        gt_box_tensor = torch.tensor(gt_box, dtype=torch.float)
-        print(gt_box_tensor)
-        # iou with current ground truth box
-        iou = ops.box_iou(prev_box, gt_box_tensor)
-
-        # Add to list, iou obtained
-        iou_results.append(iou)
 
     return iou_results
